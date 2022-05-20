@@ -3,7 +3,7 @@ File:           controller.java
 Project:        EnergyPlus Optimization + Occupancy + Multiple Simulations SUPERSOCKET
 Author(s):      PJ McCurdy, Kaleb Pattawi, Brian Woo-Shem, Hannah Covington
 Version:        5.99 BETA
-Last Updated:   2022-05-06 by Brian
+Last Updated:   2022-05-20 by Brian
 Notes: Code for the optimization simulations. Should compile and run but may not have perfect results.
 Run:   Change file paths in this code. Then build or build-all. Run as part of federation.
 
@@ -50,29 +50,29 @@ public class Controller extends ControllerBase {
 
     // Defining Global Variables ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     // Basic IO
-    int numSockets = 8;  // CHANGE FOR MULTIPLE EP SIMS! Default is 1 for single EP. TODO: get it to read config.
-    // Note numSockets is a misnomer - more like numSimulations because all sims run from a single socket now!
-    String[] varNames = new String[22];   // add more empty vals if sending more vars -- Brian changed from 15 to 22
-    String[] doubles = new String[22];
-    String[] dataStrings = new String[numSockets];
-    String[] holder=new String[numSockets];
-    double[] outTemps=new double[numSockets]; //Outdoor temp
-    double[] coolTemps= new double[numSockets]; 
-    double[] heatTemps= new double[numSockets];
+    static final int numSims = 2;  // CHANGE FOR MULTIPLE EP SIMS! Default is 1 for single EP. TODO: get it to read config.
+    // making these things static final so they don't get modified by mistake.
+    String[] varNames = new String[12*numSims];   // add more empty vals if sending more vars -- Brian changed from 15 to 22
+    String[] doubles = new String[12*numSims];
+    String[] dataStrings = new String[numSims];
+    String[] holder=new String[numSims];
+    double[] outTemps=new double[numSims]; //Outdoor temp
+    double[] setCool= new double[numSims]; 
+    double[] setHeat= new double[numSims];
     // From EP via Socket
-    double[] zoneTemps= new double[numSockets];
-    double[] zoneRHs= new double[numSockets];
-    double[] heatingEnergy= new double[numSockets];
-    double[] coolingEnergy= new double[numSockets];
-    double[] netEnergy= new double[numSockets];
-    double[] energyPurchased= new double[numSockets];
-    double[] energySurplus= new double[numSockets];
-    double[] solarRadiation= new double[numSockets];
-    double[] receivedHeatTemp= new double[numSockets];
-    double[] receivedCoolTemp= new double[numSockets];
-    double[] dayOfWeek= new double[numSockets];
+    double[] zoneTemps= new double[numSims];
+    double[] zoneRHs= new double[numSims];
+    double[] heatingEnergy= new double[numSims];
+    double[] coolingEnergy= new double[numSims];
+    double[] netEnergy= new double[numSims];
+    double[] energyPurchased= new double[numSims];
+    double[] energySurplus= new double[numSims];
+    double[] solarRadiation= new double[numSims];
+    double[] receivedHeatTemp= new double[numSims];
+    double[] receivedCoolTemp= new double[numSims];
+    double[] dayOfWeek= new double[numSims];
     double price = 10; // Set a default price here
-    int[] numVars = new int[numSockets]; //for multiple sockets
+    int[] numVars = new int[numSims]; //for multiple sockets
     
     // for no time delay
     int receivedSimsCount = 0;
@@ -91,12 +91,12 @@ public class Controller extends ControllerBase {
     
     // For Setpoints & Optimization ========================================================
     // Number of optimization to run per hour. Default is 1
-    int timestepsToOpt = 12;
-    int nopt = 12/timestepsToOpt;
+    static final int nt = 12; //timesteps PER hour
+    static final int nopt = 12/nt;
     // Temperature and setpoint data
-    String[] varsT = new String[timestepsToOpt+2]; 
-    String[] varsH = new String[timestepsToOpt+2]; 
-    String[] varsC = new String[timestepsToOpt+2];
+    //String[] varsT = new String[nt+2]; 
+    //String[] varsH = new String[nt+2]; 
+    //String[] varsC = new String[nt+2];
     // Keystrings for encoding and decoding data into a string
     String varNameSeparator = "@";
     String doubleSeparator = ",";
@@ -110,11 +110,11 @@ public class Controller extends ControllerBase {
     
     //For appliance scheduling =================================================
     //input variables
-    int timestep = 12; //timesteps PER hour
+    //int nt = 12; //timesteps PER hour - constant, same as for Setpoints & Optimization
 	int state;
 	int runTime = 12; //number of time steps the appliance is activated
-	int sleepTime = 22*timestep; //time that the house is asleep
-	int wakeTime = 6*timestep; //time that the house is awake
+	int sleepTime = 22*nt; //time that the house is asleep
+	int wakeTime = 6*nt; //time that the house is awake
 	int numActPerDay = 1; //number of activations 
 	int numActToday = 0;
 	int dayCount = 1;
@@ -163,14 +163,14 @@ public class Controller extends ControllerBase {
         File cf = new File("config.txt");
         BufferedReader br = new BufferedReader(new FileReader(cf));
         //Determine Setpoint Type --- Leave these false for config.txt input
-        boolean[] optimizeSet = new boolean[numSockets]; // intialize with false; //True if optimized, false if not optimized
-        boolean[] adaptiveSet = new boolean[numSockets]; // intialize with false; //True if using adaptive setpoint, false if fixed setpoint. Not used if optimizeSet = true.
-        boolean[] occupancySet = new boolean[numSockets]; // intialize with false; //Does it use occupancy?
+        boolean[] optimizeSet = new boolean[numSims]; // intialize with false; //True if optimized, false if not optimized
+        boolean[] adaptiveSet = new boolean[numSims]; // intialize with false; //True if using adaptive setpoint, false if fixed setpoint. Not used if optimizeSet = true.
+        boolean[] occupancySet = new boolean[numSims]; // intialize with false; //Does it use occupancy?
         //Determine Setpoint Type
         String st = "";
-        String[] mode = new String[numSockets];
-        String[] heatOrCool = new String[numSockets];
-        char[] hcc = new char[numSockets];  //  initialize with 'z' in for loop
+        String[] mode = new String[numSims];
+        String[] heatOrCool = new String[numSims];
+        char[] hcc = new char[numSims];  //  initialize with 'z' in for loop
         String dateRange = "";
         String loc = "";
         char wholesaleType = 'z';
@@ -180,7 +180,7 @@ public class Controller extends ControllerBase {
         String setpointFile = "occupancyAdaptSetpoints.py";
 
         String temp = "";
-        String[] temps = new String[numSockets];
+        String[] temps = new String[numSims];
         while ((st = br.readLine())!=null){
             //System.out.println(st);
             // Mode is per-sim
@@ -190,7 +190,7 @@ public class Controller extends ControllerBase {
                 mode = temp.split(configSeparator);
                 //log.info("Mode 1:" + mode[0]);
                 //log.info("Mode 2:" + mode[1]);
-                for(int j=0; j<numSockets; j++){
+                for(int j=0; j<numSims; j++){
                     System.out.println("Mode " + j + ": " + mode[j]);
                 }
             }// heatorcool is per sim
@@ -200,7 +200,7 @@ public class Controller extends ControllerBase {
                 heatOrCool = temp.split(configSeparator);
                 //log.info("heatOrCool 1:" + heatOrCool[0]);
                 //log.info("heatOrCool 2:" + heatOrCool[1]);
-                for(int j=0; j<numSockets; j++){
+                for(int j=0; j<numSims; j++){
 					int k = 0; //catch extra spaces stuck in the string
 					while (heatOrCool[j].charAt(k) == ' ') { k++; }
                     hcc[j] = heatOrCool[j].charAt(k); // should be one of: h, c, a. MAY change during auto setting
@@ -214,16 +214,16 @@ public class Controller extends ControllerBase {
             else if(st.contains("optimize:")){
                 temp = br.readLine();
                 temps = temp.split(configSeparator);
-                if (temps.length < numSockets){
+                if (temps.length < numSims){
 					// Warn and propagate first value
-					for(int j=0; j<numSockets; j++){
+					for(int j=0; j<numSims; j++){
 						optimizeSet[j] = Boolean.parseBoolean(temps[0]);
 						System.out.println("Warning: Insufficient Optimize info in config. Using first value for all = " + optimizeSet[0]);
 					}
 				}
 				else{
 					// sufficient values provided
-					for(int j=0; j<numSockets; j++){
+					for(int j=0; j<numSims; j++){
 						optimizeSet[j] = Boolean.parseBoolean(temps[j]);
 						System.out.println("optimizeSet " + j + ": " + optimizeSet[j]);
 					}
@@ -256,17 +256,32 @@ public class Controller extends ControllerBase {
         System.out.println("Wholesale Type: " + wholesaleType);
         System.out.println("writeFile: " + writeFile);
         System.out.println("pythonCommand: " + pythonCommand);
+        int numPython = 0; //num sims requiring Python
         // if not optimizing, figure out occupancySet and adaptiveSet booleans. Note optimize uses only MODE, not occupancySet or adaptiveSet.
-        for(int j=0; j<numSockets; j++){
+        for(int j=0; j<numSims; j++){
             // Need to intialize occupancySet and adaptiveSet = false and change if mode says otherwise:
             occupancySet[j] = false;
             adaptiveSet[j] = false;
-            if(!optimizeSet[j]){
-                if(mode[j].contains("occupancy")){ occupancySet[j] = true;}
+            if(optimizeSet[j]){
+				numPython++;
+			}
+            else{
+                if(mode[j].contains("occupancy")){ 
+					occupancySet[j] = true; 
+					numPython++;
+				}
                 else if(mode[j].contains("adaptive")){ adaptiveSet[j] = true;}
                 else if(mode[j].equals("")){ System.out.println("Text Alert: config.txt missing or contains invalid parameters."); }
             }
         }
+        // Temperature and setpoint data
+		String[] varsT = new String[numPython*nt+2]; 
+		String[] varsH = new String[numPython*nt+2]; 
+		String[] varsC = new String[numPython*nt+2];
+		String[] varsP = new String[numPython*nt+2]; 
+		String[] varsS = new String[numPython*nt+2];
+		String[] varsO = new String[numPython*nt+2]; 
+		String[] varsE = new String[numPython*nt+2];
         // end config.txt ================================================================
         
         // Reading Occupancy Information ==================================================
@@ -285,7 +300,7 @@ public class Controller extends ControllerBase {
 		    if (occupancyData.get(k) == 1) {
 			    numOccupiedToday = numOccupiedToday + 1;
 		    }
-		    if ((k+1)%(24*timestep) == 0 && k!=0) {
+		    if ((k+1)%(24*nt) == 0 && k!=0) {
 			    timeStepsOccupied.add(numOccupiedToday); 
 			    numOccupiedToday = 0;
 		    }
@@ -347,7 +362,7 @@ public class Controller extends ControllerBase {
             // Waits to receive Socket_Controller and Reader_Controller to ensure everything stays on the same timestep
             while (!(receivedSocket)){
                 //while ((!(receivedSocket) || !(receivedReader))){ // Reader stuff is commented out because Reader not currently used
-                log.info("waiting to receive Socket_Controller interaction...");
+                System.out.println("waiting to receive Socket_Controller interaction...\t"+waitTime/3);
                 synchronized(lrc){
                     lrc.tick();
                 }
@@ -410,14 +425,20 @@ public class Controller extends ControllerBase {
 			
 			sblock= String.valueOf((int)hour);
             sday = String.valueOf(day);
+            
+            // Initialize counter for setting setpoint temp for next hour  -- only reset p before anything runs
+			p=0;
+			System.out.println("timestep p = "+String.valueOf(p));
+			
+			int j = 0;
 
 //+++++++++++++++++++++++++++++ Start loop to calculate setpoints for each EnergyPlus simulation +++++++++++++++++++++++++++++//
-            for(int i=0;i<numSockets;i++){
+            for(int i=0;i<numSims;i++){
 
         // SETPOINTS & OPTIMIZATION ===============================================================
                 // Reset variables to defaults
                 String s = null;
-                String dataStringOpt = "";
+                String dataStringOptE = "";
                 String dataStringOptT = "";
                 String dataStringOptP = "";
                 String dataStringOptO = "";
@@ -473,7 +494,7 @@ public class Controller extends ControllerBase {
                     if (hour%nopt == 0){
                         try {
                             
-                            dataStringOpt = sblock;
+                            dataStringOptE = sblock;
                             //dataStringOptT = sblock; do not reset
                             dataStringOptP = sblock;
                             dataStringOptO = sblock;
@@ -487,10 +508,10 @@ public class Controller extends ControllerBase {
                             
                             // Call Python optimization & occupancy code with necessary info
                             if (optimizeSet[i]){
-                                pycmd = pythonCommand + " ./" + optimizerFile + " " + sday +" " +sblock +" "+ String.valueOf(zoneTemps[i])+ " " + String.valueOf(24) + " " + timestepsToOpt + " " + hcc[i] + " " + mode[i] + " " + dateRange + " " + loc + " " + wholesaleType; 
+                                pycmd = pythonCommand + " ./" + optimizerFile + " " + sday +" " +sblock +" "+ String.valueOf(zoneTemps[i])+ " " + String.valueOf(24) + " " + nt + " " + hcc[i] + " " + mode[i] + " " + dateRange + " " + loc + " " + wholesaleType; 
                             }
                             else{ // Call Python adaptive and occupancy setpoints code with necessary info
-                                pycmd = pythonCommand + " ./" + setpointFile + " " +sday +" " +sblock +" "+ String.valueOf(zoneTemps[i])+ " " + String.valueOf(24) + " " + timestepsToOpt + " " + hcc[i] + " " + mode[i] + " " + dateRange + " " + loc + " " + wholesaleType;
+                                pycmd = pythonCommand + " ./" + setpointFile + " " +sday +" " +sblock +" "+ String.valueOf(zoneTemps[i])+ " " + String.valueOf(24) + " " + nt + " " + hcc[i] + " " + mode[i] + " " + dateRange + " " + loc + " " + wholesaleType;
                             }
                             System.out.println("Run:  " + pycmd); //Display command used for debugging
                             pro = Runtime.getRuntime().exec(pycmd); // Runs command
@@ -532,14 +553,14 @@ public class Controller extends ControllerBase {
                                         break;
                                     default: // Not a keystring, so it is probably data
                                         switch(var2save) {
-                                                case 'E': dataStringOpt = dataStringOpt + separatorOpt + s; break;
-                                                case 'T': dataStringOptT = dataStringOptT + separatorOpt + s; break;
-                                                case 'P': dataStringOptP = dataStringOptP + separatorOpt + s; break;
-                                                case 'O': dataStringOptO = dataStringOptO + separatorOpt + s; break;
-                                                case 'S': dataStringOptS = dataStringOptS + separatorOpt + s; break;
-                                                case 'H': dsoHeatSet = dsoHeatSet + separatorOpt + s; break;
-                                                case 'C': dsoCoolSet = dsoCoolSet + separatorOpt + s; break;
-                                                default: // Do nothing
+											case 'E': dataStringOptE = dataStringOptE + separatorOpt + s; break;
+											case 'T': dataStringOptT = dataStringOptT + separatorOpt + s; break;
+											case 'P': dataStringOptP = dataStringOptP + separatorOpt + s; break;
+											case 'O': dataStringOptO = dataStringOptO + separatorOpt + s; break;
+											case 'S': dataStringOptS = dataStringOptS + separatorOpt + s; break;
+											case 'H': dsoHeatSet = dsoHeatSet + separatorOpt + s; break;
+											case 'C': dsoCoolSet = dsoCoolSet + separatorOpt + s; break;
+											default: // Do nothing
                                         } // End var2save switch case
                                     } // End s switch case
                                 } //End while next line not null
@@ -550,16 +571,32 @@ public class Controller extends ControllerBase {
                             }
                             // Extra check if no keystrings found, var2save will still be default 'Z'. Controller will probably crash after this, but it is usually caused by Python code crashing and not returning anything. Warn user so they debug correct program.
                             if (var2save == 'Z') { System.out.println("Hiss... No keystrings from Python found. Python may have crashed and returned null. Check command after \"Run:\""); }
+                            
                             //Convert single datastring to array of substrings deliniated by separator
-                            vars = dataStringOpt.split(separatorOpt);
+                            String[] splitE = dataStringOptE.split(separatorOpt);
                             // WARNING: varsT must be instantiated differently to save values across different sims!
-                            varsT = varsT + dataStringOptT.split(separatorOpt, timestepsToOpt+1); //2nd entry is limit to prevent overflowing preallocated array
-                            varsP = dataStringOptP.split(separatorOpt);
-                            varsO = dataStringOptO.split(separatorOpt);
-                            varsS = dataStringOptS.split(separatorOpt);
+                            System.out.println("Sim " + i + "   dataStringOptT = " + dataStringOptT);
+                            String[] splitT = dataStringOptT.split(separatorOpt, nt+1); //2nd entry is limit to prevent overflowing preallocated array
+                            String[] splitP = dataStringOptP.split(separatorOpt);
+                            String[] splitO = dataStringOptO.split(separatorOpt);
+                            String[] splitS = dataStringOptS.split(separatorOpt);
                             //System.out.println("dsoHeatSet = " + dsoHeatSet); //for debugging
-                            varsH = dsoHeatSet.split(separatorOpt, timestepsToOpt+1);
-                            varsC = dsoCoolSet.split(separatorOpt, timestepsToOpt+1);
+                            //System.out.println("dsoCoolSet = " + dsooolSet);
+                            String[] splitH = dsoHeatSet.split(separatorOpt, nt+1);
+                            String[] splitC = dsoCoolSet.split(separatorOpt, nt+1);
+                            j = 0;
+                            while(j<nt){
+								// for supersocket add to array of existing values
+								varsE[j+i*nt] = splitE[j];
+								varsT[j+i*nt] = splitT[j];
+								varsO[j+i*nt] = splitO[j];
+								varsS[j+i*nt] = splitS[j];
+								varsH[j+i*nt] = splitH[j];
+								varsC[j+i*nt] = splitC[j];
+								varsP[j+i*nt] = splitP[j];
+								j++;
+							}
+							System.out.println("Sim " + i + "   varsT = " + varsT);
                             
                             // End getting data from Python Setpoint Code ------------------------
                             
@@ -585,7 +622,7 @@ public class Controller extends ControllerBase {
 
 									// Write in file
 									for (int in =0;in<13;in++) {
-										bw.write(vars[in]+"\t"+varsT[in]+"\t"+varsP[in]+"\t"+varsO[in]+"\t"+varsS[in]+"\t"+varsH[in]+"\t"+varsC[in]+"\n");
+										bw.write(varsE[nt*i+in]+"\t"+varsT[nt*i+in]+"\t"+varsP[nt*i+in]+"\t"+varsO[nt*i+in]+"\t"+varsS[nt*i+in]+"\t"+varsH[nt*i+in]+"\t"+varsC[nt*i+in]+"\n");
 									}
 									// Close and save file
 									bw.close();
@@ -600,29 +637,29 @@ public class Controller extends ControllerBase {
                             var2save = 'Z';
 
                             // Initialize counter for setting setpoint temp for next hour 
-                            p=0;
-                            System.out.println("timestep p = "+String.valueOf(p));
+                            //p=0;
+                            //System.out.println("timestep p = "+String.valueOf(p));
                         } //End hourly optimization ------------------------------------------------
                         
                         // Below here runs every timestep that is not on a whole hour -------
 
                         try{
 							// data for this round is index numSimsWithOpt*12 + p
-							// timestepsToOpt = 12
+							// nt = 12
                             if(hcc[i] == 'h'){
-                                heatTemps[i]=Double.parseDouble(varsT[p+1]); //vars T has 12 elements. p should be reset per hour per sim
-                                System.out.println("heatTemp: "+String.valueOf(heatTemps[i]));
-                                coolTemps[i]=32.0; //Setback to prevent AC activation
+                                setHeat[i]=Double.parseDouble(varsT[i*nt+p+1]); //vars T has 12 elements. p should be reset per hour per sim.  
+                                System.out.println("setpointHeating: "+String.valueOf(setHeat[i]));
+                                setCool[i]=32.0; //Setback to prevent AC activation
                             }
                             else{ // Cooling
-                                coolTemps[i]=Double.parseDouble(varsT[p+1]);
-                                System.out.println("coolTemp: "+String.valueOf(coolTemps[i]));
-                                heatTemps[i]=15.0; //Setback to prevent heater activation
+                                setCool[i]=Double.parseDouble(varsT[i*nt+p+1]);
+                                System.out.println("setpointCooling: "+String.valueOf(setCool[i]));
+                                setHeat[i]=15.0; //Setback to prevent heater activation
                             }
                         }
                         catch(ArrayIndexOutOfBoundsException aie){ //Detect if couldn't get datastrings from Python. Usually indicates Python crashed.
 							System.out.println("Errorlog: Attempted to access simulation " + i);
-							System.out.println("Errorlog: Attempted to access varsT " + p+1);
+							System.out.println("Errorlog: Attempted to access varsT " + i*nt+p+1);
                             System.out.println(aie);
                             if (p<2){ //Crashed on first few timesteps usually means Python crashed
 								System.out.println("Hiss... Python may have crashed and returned null. Check command after \"Run:\" ");
@@ -632,8 +669,8 @@ public class Controller extends ControllerBase {
 							}
                             // This error activated on 8 sim, but Python is fine
                         }
-                        p=p+1;
-                        System.out.println("timestep p = "+String.valueOf(p)); //p got to 13 and crashed 
+                        //p=p+1;
+                        //System.out.println("timestep p = "+String.valueOf(p)); //p got to 13 and crashed 
                         //Suspect that varsT may need to become 2D for timestep and sim
                         
                     //-------------------------------------------------------------------------------------------------            
@@ -648,27 +685,27 @@ public class Controller extends ControllerBase {
                     // Determine minimum and maximum temperatures allowed from optimization or occupancy output as 'heating setpoint bounds' and 'cooling setpoint bounds' - Brian
                     min_heat_temp = Double.parseDouble(varsH[p]); // [p] because p incremented since previous usage
                     max_cool_temp = Double.parseDouble(varsC[p]);
-                    // Alternately it might actually supposed to be coolTemps and heatTemps?
+                    // Alternately it might actually supposed to be setCool and setHeat?
                     // In which case would be identical to the non-optimized adaptive and fixed cases.
 
                     // Fuzzy cool and heat are global variables that toggle only when criteria is met.
                     if (hcc[i] == 'c'){ //Cooling
                         if (zoneTemps[i] >= max_cool_temp - 0.2){ // if likely to exceed maximum band
                             fuzzy_cool = -1;
-                        } else if (zoneTemps[i] <= coolTemps[i]-1.1){ // if colder than necessary, allow to warm up
+                        } else if (zoneTemps[i] <= setCool[i]-1.1){ // if colder than necessary, allow to warm up
                             fuzzy_cool = 1;
                         }
-                        coolTemps[i] = coolTemps[i] - 0.6 + fuzzy_cool * OFFSET;   // -0.6 so that oscillates 0.1-1.1 degree under cooling setpoint
-                        heatTemps[i] = 15.0; // IF COOLING for now to avoid turning on heat
+                        setCool[i] = setCool[i] - 0.6 + fuzzy_cool * OFFSET;   // -0.6 so that oscillates 0.1-1.1 degree under cooling setpoint
+                        setHeat[i] = 15.0; // IF COOLING for now to avoid turning on heat
                     }
                     else{ // Heating
                         if (zoneTemps[i] <= min_heat_temp + 0.2){ // if likely to exceed minimum band
                             fuzzy_heat = 1;
-                        } else if (zoneTemps[i] >= heatTemps[i]+1.1){
+                        } else if (zoneTemps[i] >= setHeat[i]+1.1){
                             fuzzy_heat = -1;
                         }
-                        heatTemps[i] = heatTemps[i] + 0.6 + fuzzy_heat * OFFSET;  // +0.6 so that oscillates 0.1-1.1 degree above heating setpoint
-                        coolTemps[i] = 32.0; // IF HEATING for now to avoid turning on AC
+                        setHeat[i] = setHeat[i] + 0.6 + fuzzy_heat * OFFSET;  // +0.6 so that oscillates 0.1-1.1 degree above heating setpoint
+                        setCool[i] = 32.0; // IF HEATING for now to avoid turning on AC
                     }
                     // End fuzzy
                 //END OPTIMIZATION or OCCUPANCY --------------------------------------------------------------
@@ -682,23 +719,23 @@ public class Controller extends ControllerBase {
                         // Sets to a the minimum of 18.9 when outdoor temp outTemps < 10C, and max 30.2C when outTemps >= 33.5
                         // Uses sliding scale for 10 < outTemps < 33.5 C
                         // Note if temperature is consistently above 33.5C or below 10C no changes in setpoint will occur.
-                        System.out.println("Outdoor Temp outTemps = " + outTemps[i]);
+                        System.out.println("Adaptive Setpoint - using Outdoor Temp outTemps = " + outTemps[i]);
                         if (outTemps[i]<=10){
-                            heatTemps[i]=18.9;
-                            coolTemps[i]=22.9;
+                            setHeat[i]=18.9;
+                            setCool[i]=22.9;
                         }else if (outTemps[i]>=33.5){
-                            heatTemps[i]=26.2;
-                            coolTemps[i]=30.2;
+                            setHeat[i]=26.2;
+                            setCool[i]=30.2;
                         }else {
-                            heatTemps[i] = 0.31*outTemps[i] + 17.8-2+0.5;
-                            coolTemps[i] = 0.31*outTemps[i] + 17.8+2+0.5;
+                            setHeat[i] = 0.31*outTemps[i] + 17.8-2+0.5;
+                            setCool[i] = 0.31*outTemps[i] + 17.8+2+0.5;
                         }
 
                         if(hcc[i] == 'h'){
-                            coolTemps[i]= 30.2;     // 23.0
+                            setCool[i]= 30.2;     // 23.0
                         }
                         else{
-                            heatTemps[i] = 15.0;   // 20.0 
+                            setHeat[i] = 15.0;   // 20.0 
                         }
                     } 
                 // End Adaptive Setpoint Control -------------------------------------------------------
@@ -706,12 +743,12 @@ public class Controller extends ControllerBase {
                 // FIXED SETPOINT _________________________________________________________________________
                     else{ //Not adaptive, so fixed
                         if(hcc[i] == 'h'){
-                            coolTemps[i] = 32.0;
-                            heatTemps[i] = 20.0;
+                            setCool[i] = 32.0;
+                            setHeat[i] = 20.0;
                         }
                         else{ //cool
-                            coolTemps[i]= 23.0;
-                            heatTemps[i] = 15.0;
+                            setCool[i]= 23.0;
+                            setHeat[i] = 15.0;
                         }
                     }
                 //END FIXED SETPT -------------------------------------------------------------------
@@ -722,23 +759,23 @@ public class Controller extends ControllerBase {
                     double OFFSET = 0.5; // need to change slightly higher/lower so E+ doesnt have issues
                     if (hcc[i] == 'c'){
                         // For Cooling 1 degree under Cooling setpoint:
-                        if (zoneTemps[i] >= coolTemps[i] - 0.2){ // check if likely to exceed maximum band. Was -0.1 but want to be more aggressive
+                        if (zoneTemps[i] >= setCool[i] - 0.2){ // check if likely to exceed maximum band. Was -0.1 but want to be more aggressive
                             fuzzy_cool = -1;
-                        } else if (zoneTemps[i] <= coolTemps[i]-1.1){
+                        } else if (zoneTemps[i] <= setCool[i]-1.1){
                             fuzzy_cool = 1;
                         }
-                        coolTemps[i] = coolTemps[i] - 0.6 +fuzzy_cool*OFFSET;   // - 0.6 so that oscillates 0.1-1.1 degree under cooling setpoint
-                        heatTemps[i] = 15.0; // Override for now to avoid turning on AC. 
+                        setCool[i] = setCool[i] - 0.6 +fuzzy_cool*OFFSET;   // - 0.6 so that oscillates 0.1-1.1 degree under cooling setpoint
+                        setHeat[i] = 15.0; // Override for now to avoid turning on AC. 
                         }
                     else{ //Heat
                         // For Heating 1 degree under Heating setpoint:
-                        if (zoneTemps[i] <= heatTemps[i] + 0.2){ // check if likely to exceed minimum band
+                        if (zoneTemps[i] <= setHeat[i] + 0.2){ // check if likely to exceed minimum band
                             fuzzy_heat = 1;
-                        } else if (zoneTemps[i] >= heatTemps[i]+1.1){
+                        } else if (zoneTemps[i] >= setHeat[i]+1.1){
                             fuzzy_heat = -1;
                         }
-                        heatTemps[i] = heatTemps[i] + 0.6 +fuzzy_heat*OFFSET;  // + 0.6 so that oscillates 0.1-1.1 degree above heating setpoint
-                        coolTemps[i] = 32.0; // Override for now to avoid turning on heat. 
+                        setHeat[i] = setHeat[i] + 0.6 +fuzzy_heat*OFFSET;  // + 0.6 so that oscillates 0.1-1.1 degree above heating setpoint
+                        setCool[i] = 32.0; // Override for now to avoid turning on heat. 
                     }
                     
                     // END FUZZY NO OPT ------------------------------------------------------------
@@ -748,7 +785,7 @@ public class Controller extends ControllerBase {
     
     //BEGIN APPLIANCE SCHEDULER ============================================================
                 
-                System.out.println("TIMESTEP FOR APPLIANCE: " + (int)currentTime);
+                //System.out.println("TIMESTEP FOR APPLIANCE: " + (int)currentTime);
                 System.out.println("OCCUPANCY AT TIMESTEP: " + occupancyData.get((int)currentTime));
                 
                 //clearing information from past day and getting new probability of activation
@@ -759,7 +796,7 @@ public class Controller extends ControllerBase {
                     System.out.println(activationProb);
                 }else if (currentTime+1 == occupancyData.size()){
                     System.out.println("END OF SIMULATION");
-                }else if ((currentTime+1)%(24*timestep) == 0) {
+                }else if ((currentTime+1)%(24*nt) == 0) {
                     numActToday = 0;
                     //dayCount = dayCount + 1;
                     // Problem: original version looped once for single sim
@@ -767,12 +804,12 @@ public class Controller extends ControllerBase {
                     // each new day. 
                     // Replace with formula instead - Brian
                     // currentTime represents 5 mins elapsed
-                    // timestep = 12 constant
-                    dayCount = (int)(currentTime+1)/(24*timestep);
+                    // nt = 12 constant
+                    dayCount = (int)(currentTime+1)/(24*nt);
                     // should be int anyway, but forcing int to be safe
                     
-                    sleepTime = sleepTime + timestep*24;
-                    wakeTime = wakeTime + timestep*24;
+                    sleepTime = sleepTime + nt*24;
+                    wakeTime = wakeTime + nt*24;
                     System.out.println("DAY COUNTER: "+ dayCount); // failed after dayCount = 9
                     activationProb = dailyActivationProb/timeStepsOccupied.get(dayCount-1);
                     System.out.println(activationProb);
@@ -825,39 +862,43 @@ public class Controller extends ControllerBase {
                         randomNumHistory.add(0.0);
                     }
                 }
-                System.out.println("STATE HISTORY:");
-                System.out.println(stateHistory);
-                System.out.println("RANDOM NUMBERS:");
-                System.out.println(randomNumHistory);
+                //System.out.println("STATE HISTORY:"); //These never get reset so by end of simulation there may be thousand or more elements!
+                //System.out.println(stateHistory);
+                //System.out.println("RANDOM NUMBERS:");
+                //System.out.println(randomNumHistory);
 
                 //END APPLIANCE SCHEDULER =================================================================
                 
                 
                 // DISPLAY WHAT GETS SENT, regardless of operating mode --------------------------------------ADD VARIABLES IF NEEDED
-                System.out.println("heatTemps[" + i + "] = "+heatTemps[i] );
-                System.out.println("coolTemps[" + i + "] = "+coolTemps[i] );
+                System.out.println("setHeat[" + i + "] = "+setHeat[i] );
+                System.out.println("setCool[" + i + "] = "+setCool[i] );
                 System.out.println("Dishwasher Activation[" + i + "] = "+ state);
             
             
             }
+            
             //+++++++++++++++++++++++++++++ End loop to calculate setpoints for each EnergyPlus simulation +++++++++++++++++++++++++++++//
+            
+            p=p+1; //timestep
+			System.out.println("timestep p = "+String.valueOf(p)); //moved here so it runs once per loop of all sims
             
     // SEND VALUES to each socket federate -------------------------------------------------------ADD VARIABLES IF NEEDED
     //System.out.println("send to sockets interactions loop");
-    for(int i=0;i<numSockets;i++){
+    for(int i=0;i<numSims;i++){
         // simID = i;  I am leaving this here to remind myself that i is simID for each socket
             
         dataStrings[i] = "epGetStartCooling"+varNameSeparator;
-        dataStrings[i] = dataStrings[i] + String.valueOf(coolTemps[i]) + doubleSeparator;
+        dataStrings[i] = dataStrings[i] + String.valueOf(setCool[i]) + doubleSeparator;
         
         dataStrings[i] = dataStrings[i] + "epGetStartHeating"+varNameSeparator;
-        dataStrings[i] = dataStrings[i] + String.valueOf(heatTemps[i]) + doubleSeparator;
+        dataStrings[i] = dataStrings[i] + String.valueOf(setHeat[i]) + doubleSeparator;
 
         dataStrings[i] = dataStrings[i] + "dishwasherSchedule"+varNameSeparator;
         dataStrings[i] = dataStrings[i] + String.valueOf(state) + doubleSeparator;
 
         //print out result
-        System.out.println("dataStrings[simID] = "+ dataStrings[i] );
+        System.out.println("Sending: dataStrings[" + i + "] = "+ dataStrings[i] );
 
             // SendModel vSendModel = create_SendModel();
             // vSendModel.set_dataString(dataString);
@@ -867,13 +908,13 @@ public class Controller extends ControllerBase {
             Controller_Socket sendControls = create_Controller_Socket();
             sendControls.set_dataString(dataStrings[i]);
             sendControls.set_simID(i);
-            System.out.println("Send sendControls interaction: " + coolTemps[i] + " to socket #" + i);
+            //System.out.println("Send sendControls interaction: " + setCool[i] + " to Simulation #" + i);
             sendControls.sendInteraction(getLRC());
 
             dataStrings[i] = "";
 	}
 
-	System.out.println("timestep after sending Socket... should advance after this: "+ currentTime);
+	System.out.println("timestep after sending Socket... should advance after this: " + currentTime);
 	// End Send to Socket -----------------------------------------------------------
 
 			if (writeFile){
@@ -891,7 +932,7 @@ public class Controller extends ControllerBase {
 						// Write header row
 						FileWriter fw = new FileWriter(file.getAbsoluteFile(),true);
 						BufferedWriter bw = new BufferedWriter(fw);
-						bw.write("CurrentTime\tHour\tzoneTemps[°C]\toutTemps[°C]\tsolarRadiation[W/m^2]\treceivedHeatTemp[°C]\treceivedCoolTemp[°C]\theatTemps[°C]\tcoolTemps[°C]\n");
+						bw.write("CurrentTime\tHour\tzoneTemps[°C]\toutTemps[°C]\tsolarRadiation[W/m^2]\treceivedHeatTemp[°C]\treceivedCoolTemp[°C]\tsetHeat[°C]\tsetCool[°C]\n");
 						bw.close();
 					}
 
@@ -900,10 +941,10 @@ public class Controller extends ControllerBase {
 
 					// Write in file
 
-					for(int i=0;i<numSockets;i++){
+					for(int i=0;i<numSims;i++){
 						// Not sure why but the hour variable was causing an unsuccessful build here
-						// bw.write(currentTime+"\t"+hour+"\t"+ zoneTemps[i]+"\t"+ outTemps[i]+"\t"+ solarRadiation[i]+"\t" + receivedHeatTemp[i]+"\t"+ receivedCoolTemp[i]+"\t"+heatTemps[i]+"\t"+coolTemps[i]+"\n");
-						bw.write(currentTime+"\t"+ zoneTemps[i]+"\t"+ outTemps[i]+"\t"+ solarRadiation[i]+"\t" + receivedHeatTemp[i]+"\t"+ receivedCoolTemp[i]+"\t"+heatTemps[i]+"\t"+coolTemps[i]+"\n");
+						// bw.write(currentTime+"\t"+hour+"\t"+ zoneTemps[i]+"\t"+ outTemps[i]+"\t"+ solarRadiation[i]+"\t" + receivedHeatTemp[i]+"\t"+ receivedCoolTemp[i]+"\t"+setHeat[i]+"\t"+setCool[i]+"\n");
+						bw.write(currentTime+"\t"+ zoneTemps[i]+"\t"+ outTemps[i]+"\t"+ solarRadiation[i]+"\t" + receivedHeatTemp[i]+"\t"+ receivedCoolTemp[i]+"\t"+setHeat[i]+"\t"+setCool[i]+"\n");
 					}
 
 					// Close connection & save file
@@ -943,7 +984,7 @@ public class Controller extends ControllerBase {
         ///////////////////////////////////////////////////////////////
 
         // can now exit while loop waiting for this interaction
-        log.info("received RCModel_Controller interaction");
+        System.out.println("received Socket_Controller interaction");
         
         //receivedSocket variable was here
         
@@ -953,7 +994,7 @@ public class Controller extends ControllerBase {
         // int simID = 0;
         //int simID = interaction.get_simID();  //brian removed as test
         //try doing manually - less safe in case extra simID's appear but might get past whatever bug we have rn.
-        //for (int simID = 0; simID <numSockets; simID++){
+        //for (int simID = 0; simID <numSims; simID++){
 			int simID = receivedSimsCount; // temporary fix
 			
 			System.out.println("numVars[" + simID + "] = " + numVars[simID]);
@@ -1040,7 +1081,7 @@ public class Controller extends ControllerBase {
         // this triggers on each interaction sent
         //  moved to avoid crashing everything
         receivedSimsCount += 1; 
-        if (receivedSimsCount >= numSockets){ receivedSocket = true; }
+        if (receivedSimsCount >= numSims){ receivedSocket = true; }
 		
     }
 

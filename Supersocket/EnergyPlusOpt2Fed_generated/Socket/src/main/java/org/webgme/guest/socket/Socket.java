@@ -3,7 +3,7 @@ File:           Socket.java
 Project:        EnergyPlus Optimization + Occupancy + Multiple Simulations -> SUPERSOCKET
 Author(s):      PJ McCurdy, Kaleb Pattawi, Brian Woo-Shem, Hannah Covington
 Version:        5.99 BETA
-Last Updated:   2022-05-05 by Brian
+Last Updated:   2022-05-20 by Brian
 Notes:      File paths should work as long as the main project folder is intact. SUPERSOCKET Edition
 Run:        Run as part of federation.
 Changelog:
@@ -37,13 +37,13 @@ public class Socket extends SocketBase {
 
     private double currentTime = 0;
     // START WITH simID as ZERO because java is zero indexed
-    int simID = 0;   // Change simID based on socket number
-    int numSims = 8; // Needs this to be available earlier otherwise it fails. TODO: Fix so it can go in config!
+    int simID = 0;   // Change simID based on socket number - I think this variable is unnecessary but annoying to remove
+    static final int numSims = 2; // Needs this to be available earlier otherwise it fails. TODO: Fix so it can go in config!
 
     // Define global variables
-    //changed length from 16 to 32
-    String[] varNames=new String[32];  // will have to add more empty strings based on how many strings we send/receive
-    String[] doubles= new String[32];  // will have to add more empty strings based on how many strings we send/receive
+    //changed length from 16 to 32 -> 12*numSims
+    String[] varNames=new String[12*numSims];  // will have to add more empty strings based on how many strings we send/receive
+    String[] doubles= new String[12*numSims];  // will have to add more empty strings based on how many strings we send/receive
     String varNameSeparater = "@";
     String doubleSeparater = ",";
     int numVars = 0;  
