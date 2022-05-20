@@ -1,0 +1,257 @@
+WARNING: An illegal reflective access operation has occurred
+WARNING: Illegal reflective access by com.google.inject.internal.cglib.core.$ReflectUtils$1 (file:/usr/share/maven/lib/guice.jar) to method java.lang.ClassLoader.defineClass(java.lang.String,byte[],int,int,java.security.ProtectionDomain)
+WARNING: Please consider reporting this to the maintainers of com.google.inject.internal.cglib.core.$ReflectUtils$1
+WARNING: Use --illegal-access=warn to enable warnings of further illegal reflective access operations
+WARNING: All illegal access operations will be denied in a future release
+[[1;34mINFO[m] Scanning for projects...
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--------------< [0;36morg.webgme.guest:EnergyPlusOpt2Fed_exec[0;1m >---------------[m
+[[1;34mINFO[m] [1mBuilding EnergyPlusOpt2Fed_exec 0.1.0-SNAPSHOT[m
+[[1;34mINFO[m] [1m--------------------------------[ jar ]---------------------------------[m
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mexec-maven-plugin:1.5.0:java[m [1m(default-cli)[m @ [36mEnergyPlusOpt2Fed_exec[0;1m ---[m
+
+-------------------------------------------------------------------
+GMS: address=vagrant-26863, cluster=EnergyPlusOpt2Fed1, physical address=192.168.56.102:44016
+-------------------------------------------------------------------
+16:49:59.158 [org.webgme.guest.controller.Controller.main()] INFO  org.webgme.guest.controller.Controller - Getting Configuration Settings: 
+16:49:59.159 [org.webgme.guest.controller.Controller.main()] INFO  org.webgme.guest.controller.Controller - < config.txt | EP + UCEF Occupancy Optimization Settings | Version 5.9 | Updated 2022-05-03 | Author: Brian Woo-Shem >
+16:49:59.160 [org.webgme.guest.controller.Controller.main()] INFO  org.webgme.guest.controller.Controller - ip_address: <Global. Should match ifconfig on UCEF. Typical values: 192.168.56.101 for VirtualBox, 10.16.130.### for Cluster>
+16:49:59.160 [org.webgme.guest.controller.Controller.main()] INFO  org.webgme.guest.controller.Controller - 192.168.56.102
+16:49:59.160 [org.webgme.guest.controller.Controller.main()] INFO  org.webgme.guest.controller.Controller - port_number: <FOR first simulation Socket 0 use 6789, no need to enter others as it automatically does +1 for each additional simulation>
+16:49:59.161 [org.webgme.guest.controller.Controller.main()] INFO  org.webgme.guest.controller.Controller - 6789
+16:49:59.161 [org.webgme.guest.controller.Controller.main()] INFO  org.webgme.guest.controller.Controller - MODE: < Per simulation. occupancy, adaptive90, fixed, etc. >
+16:49:59.162 [org.webgme.guest.controller.Controller.main()] INFO  org.webgme.guest.controller.Controller - Modes: 
+16:49:59.162 [org.webgme.guest.controller.Controller.main()] INFO  org.webgme.guest.controller.Controller - Mode 1:
+16:49:59.162 [org.webgme.guest.controller.Controller.main()] INFO  org.webgme.guest.controller.Controller - Mode 2:
+16:49:59.163 [org.webgme.guest.controller.Controller.main()] INFO  org.webgme.guest.controller.Controller - heatorcool: < PER Simulation. heat, cool >
+16:49:59.163 [org.webgme.guest.controller.Controller.main()] INFO  org.webgme.guest.controller.Controller - Heat or Cool vars: 
+16:49:59.163 [org.webgme.guest.controller.Controller.main()] INFO  org.webgme.guest.controller.Controller - heatOrCool 1:
+16:49:59.163 [org.webgme.guest.controller.Controller.main()] INFO  org.webgme.guest.controller.Controller - heatOrCool 2:
+16:49:59.163 [org.webgme.guest.controller.Controller.main()] INFO  org.webgme.guest.controller.Controller - hcc 0: c
+16:49:59.163 [org.webgme.guest.controller.Controller.main()] INFO  org.webgme.guest.controller.Controller - hcc 1:  
+16:49:59.164 [org.webgme.guest.controller.Controller.main()] INFO  org.webgme.guest.controller.Controller - date_range: < Global. Match dates on datafiles >
+16:49:59.164 [org.webgme.guest.controller.Controller.main()] INFO  org.webgme.guest.controller.Controller - optimize: < true, false >
+16:49:59.164 [org.webgme.guest.controller.Controller.main()] INFO  org.webgme.guest.controller.Controller - optimizeSet 0: true
+16:49:59.164 [org.webgme.guest.controller.Controller.main()] INFO  org.webgme.guest.controller.Controller - optimizeSet 1: false
+16:49:59.164 [org.webgme.guest.controller.Controller.main()] INFO  org.webgme.guest.controller.Controller - location: < Global Abbr location for temp predict coeff, use Default if unsure >
+16:49:59.164 [org.webgme.guest.controller.Controller.main()] INFO  org.webgme.guest.controller.Controller - wholesale_type: < Global. r = real-time, d = day-ahead >
+16:49:59.164 [org.webgme.guest.controller.Controller.main()] INFO  org.webgme.guest.controller.Controller - number_of_simulations: <Global. int>
+16:49:59.164 [org.webgme.guest.controller.Controller.main()] INFO  org.webgme.guest.controller.Controller - 2
+16:49:59.165 [org.webgme.guest.controller.Controller.main()] INFO  org.webgme.guest.controller.Controller - python_command: <string, usually python3>
+16:49:59.165 [org.webgme.guest.controller.Controller.main()] INFO  org.webgme.guest.controller.Controller - write_extra_data_files: < Global. true, false >
+16:49:59.165 [org.webgme.guest.controller.Controller.main()] INFO  org.webgme.guest.controller.Controller - Mode: [Ljava.lang.String;@4bf89d14
+16:49:59.165 [org.webgme.guest.controller.Controller.main()] INFO  org.webgme.guest.controller.Controller - Heat or Cool: [Ljava.lang.String;@2c30bc9f
+16:49:59.166 [org.webgme.guest.controller.Controller.main()] INFO  org.webgme.guest.controller.Controller - Date Range: 2020-08-01_2020-08-31
+16:49:59.166 [org.webgme.guest.controller.Controller.main()] INFO  org.webgme.guest.controller.Controller - Optimize: [Z@24beff25
+16:49:59.166 [org.webgme.guest.controller.Controller.main()] INFO  org.webgme.guest.controller.Controller - Location: Sac
+16:49:59.166 [org.webgme.guest.controller.Controller.main()] INFO  org.webgme.guest.controller.Controller - Wholesale Type: r
+OCCUPANCY:
+[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+TIME STEPS OCCUPIED PER DAY:
+[192, 192, 192, 192, 192, 192, 192, 192]
+16:49:59.206 [org.webgme.guest.controller.Controller.main()] INFO  org.webgme.guest.controller.Controller - waiting on readyToPopulate...
+16:57:44.866 [org.webgme.guest.controller.Controller.main()] INFO  org.webgme.guest.controller.Controller - ...synchronized on readyToPopulate
+16:57:44.875 [org.webgme.guest.controller.Controller.main()] INFO  org.webgme.guest.controller.Controller - waiting on readyToRun...
+16:57:45.129 [org.webgme.guest.controller.Controller.main()] INFO  org.webgme.guest.controller.Controller - ...synchronized on readyToRun
+16:57:45.131 [org.webgme.guest.controller.Controller.main()] INFO  org.webgme.guest.controller.Controller - started logical time progression
+timestep before receiving Socket/Reader: 0.0
+16:57:45.137 [org.webgme.guest.controller.Controller.main()] INFO  org.webgme.guest.controller.Controller - timestep before receiving Socket/Reader: 
+16:57:45.138 [org.webgme.guest.controller.Controller.main()] INFO  org.webgme.guest.controller.Controller - waiting to receive Socket_Controller interaction...
+16:57:45.242 [org.webgme.guest.controller.Controller.main()] INFO  org.webgme.guest.controller.Controller - waiting to receive Socket_Controller interaction...
+16:57:45.247 [org.webgme.guest.controller.Controller.main()] INFO  org.webgme.guest.controller.Controller - received RCModel_Controller interaction
+numVars[simID] = 0
+holder[simID] = epSendNetEnergy@226856.640625,epSendZoneMeanAirTemp@23.000351,epSendOutdoorAirTemp@24.608334,epSendZoneHumidity@46.774570,epSendEnergyPurchased@226856.640625,epSendEnergySurplus@0.000000,epSendSolarRadiation@0.000000,epSendHeatingSetpoint@20.000000,epSendCoolingSetpoint@23.000000,timestep@0.0,
+handle interaction loop
+vars[0] = epSendNetEnergy@226856.640625
+length of vars = 10
+token = epSendNetEnergy@226856.640625
+token1[0] = epSendNetEnergy
+token1[1] = 226856.640625
+varNames[j] = epSendNetEnergy
+doubles[j] = 226856.640625
+token = epSendZoneMeanAirTemp@23.000351
+token1[0] = epSendZoneMeanAirTemp
+token1[1] = 23.000351
+varNames[j] = epSendZoneMeanAirTemp
+doubles[j] = 23.000351
+token = epSendOutdoorAirTemp@24.608334
+token1[0] = epSendOutdoorAirTemp
+token1[1] = 24.608334
+varNames[j] = epSendOutdoorAirTemp
+doubles[j] = 24.608334
+token = epSendZoneHumidity@46.774570
+token1[0] = epSendZoneHumidity
+token1[1] = 46.774570
+varNames[j] = epSendZoneHumidity
+doubles[j] = 46.774570
+token = epSendEnergyPurchased@226856.640625
+token1[0] = epSendEnergyPurchased
+token1[1] = 226856.640625
+varNames[j] = epSendEnergyPurchased
+doubles[j] = 226856.640625
+token = epSendEnergySurplus@0.000000
+token1[0] = epSendEnergySurplus
+token1[1] = 0.000000
+varNames[j] = epSendEnergySurplus
+doubles[j] = 0.000000
+token = epSendSolarRadiation@0.000000
+token1[0] = epSendSolarRadiation
+token1[1] = 0.000000
+varNames[j] = epSendSolarRadiation
+doubles[j] = 0.000000
+token = epSendHeatingSetpoint@20.000000
+token1[0] = epSendHeatingSetpoint
+token1[1] = 20.000000
+varNames[j] = epSendHeatingSetpoint
+doubles[j] = 20.000000
+token = epSendCoolingSetpoint@23.000000
+token1[0] = epSendCoolingSetpoint
+token1[1] = 23.000000
+varNames[j] = epSendCoolingSetpoint
+doubles[j] = 23.000000
+token = timestep@0.0
+token1[0] = timestep
+token1[1] = 0.0
+varNames[j] = timestep
+doubles[j] = 0.0
+numVars[simID] = 0
+holder[simID] = epSendNetEnergy@226856.640625,epSendZoneMeanAirTemp@23.000351,epSendOutdoorAirTemp@24.608334,epSendZoneHumidity@46.774570,epSendEnergyPurchased@226856.640625,epSendEnergySurplus@0.000000,epSendSolarRadiation@0.000000,epSendHeatingSetpoint@20.000000,epSendCoolingSetpoint@23.000000,timestep@0.0,
+handle interaction loop
+vars[0] = epSendNetEnergy@226856.640625
+length of vars = 10
+token = epSendNetEnergy@226856.640625
+token1[0] = epSendNetEnergy
+token1[1] = 226856.640625
+varNames[j] = epSendNetEnergy
+doubles[j] = 226856.640625
+token = epSendZoneMeanAirTemp@23.000351
+token1[0] = epSendZoneMeanAirTemp
+token1[1] = 23.000351
+varNames[j] = epSendZoneMeanAirTemp
+doubles[j] = 23.000351
+token = epSendOutdoorAirTemp@24.608334
+token1[0] = epSendOutdoorAirTemp
+token1[1] = 24.608334
+varNames[j] = epSendOutdoorAirTemp
+doubles[j] = 24.608334
+token = epSendZoneHumidity@46.774570
+token1[0] = epSendZoneHumidity
+token1[1] = 46.774570
+varNames[j] = epSendZoneHumidity
+doubles[j] = 46.774570
+token = epSendEnergyPurchased@226856.640625
+token1[0] = epSendEnergyPurchased
+token1[1] = 226856.640625
+varNames[j] = epSendEnergyPurchased
+doubles[j] = 226856.640625
+token = epSendEnergySurplus@0.000000
+token1[0] = epSendEnergySurplus
+token1[1] = 0.000000
+varNames[j] = epSendEnergySurplus
+doubles[j] = 0.000000
+token = epSendSolarRadiation@0.000000
+token1[0] = epSendSolarRadiation
+token1[1] = 0.000000
+varNames[j] = epSendSolarRadiation
+doubles[j] = 0.000000
+token = epSendHeatingSetpoint@20.000000
+token1[0] = epSendHeatingSetpoint
+token1[1] = 20.000000
+varNames[j] = epSendHeatingSetpoint
+doubles[j] = 20.000000
+token = epSendCoolingSetpoint@23.000000
+token1[0] = epSendCoolingSetpoint
+token1[1] = 23.000000
+varNames[j] = epSendCoolingSetpoint
+doubles[j] = 23.000000
+token = timestep@0.0
+token1[0] = timestep
+token1[1] = 0.0
+varNames[j] = timestep
+doubles[j] = 0.0
+16:57:45.254 [org.webgme.guest.controller.Controller.main()] INFO  org.webgme.guest.controller.Controller - received RCModel_Controller interaction
+numVars[simID] = 0
+holder[simID] = epSendNetEnergy@226856.640625,epSendZoneMeanAirTemp@23.000351,epSendOutdoorAirTemp@24.608334,epSendZoneHumidity@46.774570,epSendEnergyPurchased@226856.640625,epSendEnergySurplus@0.000000,epSendSolarRadiation@0.000000,epSendHeatingSetpoint@20.000000,epSendCoolingSetpoint@23.000000,timestep@0.0,epSendNetEnergy@226864.968750,epSendZoneMeanAirTemp@23.000351,epSendOutdoorAirTemp@24.608334,epSendZoneHumidity@46.774502,epSendEnergyPurchased@226864.968750,epSendEnergySurplus@0.000000,epSendSolarRadiation@0.000000,epSendHeatingSetpoint@20.000000,epSendCoolingSetpoint@23.000000,timestep@0.0,
+handle interaction loop
+vars[0] = epSendNetEnergy@226856.640625
+length of vars = 20
+token = epSendNetEnergy@226856.640625
+token1[0] = epSendNetEnergy
+token1[1] = 226856.640625
+varNames[j] = epSendNetEnergy
+doubles[j] = 226856.640625
+token = epSendZoneMeanAirTemp@23.000351
+token1[0] = epSendZoneMeanAirTemp
+token1[1] = 23.000351
+varNames[j] = epSendZoneMeanAirTemp
+doubles[j] = 23.000351
+token = epSendOutdoorAirTemp@24.608334
+token1[0] = epSendOutdoorAirTemp
+token1[1] = 24.608334
+varNames[j] = epSendOutdoorAirTemp
+doubles[j] = 24.608334
+token = epSendZoneHumidity@46.774570
+token1[0] = epSendZoneHumidity
+token1[1] = 46.774570
+varNames[j] = epSendZoneHumidity
+doubles[j] = 46.774570
+token = epSendEnergyPurchased@226856.640625
+token1[0] = epSendEnergyPurchased
+token1[1] = 226856.640625
+varNames[j] = epSendEnergyPurchased
+doubles[j] = 226856.640625
+token = epSendEnergySurplus@0.000000
+token1[0] = epSendEnergySurplus
+token1[1] = 0.000000
+varNames[j] = epSendEnergySurplus
+doubles[j] = 0.000000
+token = epSendSolarRadiation@0.000000
+token1[0] = epSendSolarRadiation
+token1[1] = 0.000000
+varNames[j] = epSendSolarRadiation
+doubles[j] = 0.000000
+token = epSendHeatingSetpoint@20.000000
+token1[0] = epSendHeatingSetpoint
+token1[1] = 20.000000
+varNames[j] = epSendHeatingSetpoint
+doubles[j] = 20.000000
+token = epSendCoolingSetpoint@23.000000
+token1[0] = epSendCoolingSetpoint
+token1[1] = 23.000000
+varNames[j] = epSendCoolingSetpoint
+doubles[j] = 23.000000
+token = timestep@0.0
+token1[0] = timestep
+token1[1] = 0.0
+varNames[j] = timestep
+doubles[j] = 0.0
+token = epSendNetEnergy@226864.968750
+token1[0] = epSendNetEnergy
+token1[1] = 226864.968750
+varNames[j] = epSendNetEnergy
+doubles[j] = 226864.968750
+token = epSendZoneMeanAirTemp@23.000351
+token1[0] = epSendZoneMeanAirTemp
+token1[1] = 23.000351
+varNames[j] = epSendZoneMeanAirTemp
+doubles[j] = 23.000351
+token = epSendOutdoorAirTemp@24.608334
+token1[0] = epSendOutdoorAirTemp
+token1[1] = 24.608334
+varNames[j] = epSendOutdoorAirTemp
+doubles[j] = 24.608334
+token = epSendZoneHumidity@46.774502
+token1[0] = epSendZoneHumidity
+token1[1] = 46.774502
+varNames[j] = epSendZoneHumidity
+doubles[j] = 46.774502
+token = epSendEnergyPurchased@226864.968750
+token1[0] = epSendEnergyPurchased
+token1[1] = 226864.968750
+varNames[j] = epSendEnergyPurchased
+doubles[j] = 226864.968750
+token = epSendEnergySurplus@0.000000
+token1[0] = epSendEnergySurplus
+token1[1] = 0.000000
+16:57:45.257 [org.webgme.guest.controller.Controller.main()] ERROR org.webgme.guest.controller.Controller - java.lang.ArrayIndexOutOfBoundsException: Index 15 out of bounds for length 15

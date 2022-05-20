@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?tempPredictCoeff.txt?>
+<?Config file with coefficient list for energyOptTset2hr.py, version 5.3 or newer?>
+<?  Author(s):   Brian Woo-Shem ?>
+<?  Updated:     2021-08-24 ?>
+<?  Version:     0.2 ?>
+
+<loc>
+	<name>SF</name>
+	<h>
+		<c1>1.22</c1>
+		<c2>3.5e-6</c2>
+		<c3>123</c3>
+	</h>
+	<c>
+		<c1>444</c1>
+		<c2>4.4e-6</c2>
+		<c3>44.4</c3>
+	</c>
+</loc>
+
+<loc>
+	<name>SAC</name>
+	<h>
+		<c1>1.22</c1>
+		<c2>3.5e-6</c2>
+		<c3>123</c3>
+	</h>
+	<c>
+		<c1>444</c1>
+		<c2>4.4e-6</c2>
+		<c3>44.4</c3>
+	</c>
+</loc>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<project name="maven-antrun-" default="main"  >
+<target name="main">
+  <copy todir="/media/sf_ResearchDrive/MultisimScalable_0-1/EnergyPlusOpt2Fed_generated/Socket/target/conf" overwrite="true">
+    <fileset dir="/media/sf_ResearchDrive/MultisimScalable_0-1/EnergyPlusOpt2Fed_generated/Socket/conf"/>
+  </copy>
+  <copy todir="/media/sf_ResearchDrive/MultisimScalable_0-1/EnergyPlusOpt2Fed_generated/Socket/target" overwrite="true">
+    <fileset file="/media/sf_ResearchDrive/MultisimScalable_0-1/EnergyPlusOpt2Fed_generated/Socket/RTI.rid"/>
+  </copy>
+</target>
+</project>

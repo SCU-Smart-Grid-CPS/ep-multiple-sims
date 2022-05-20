@@ -1,0 +1,32 @@
+# tempPredictCoeff.txt
+# Config file with coefficient list for energyOptTset2hr.py, version 5.3 or newer
+#  Author(s):   Brian Woo-Shem
+#  Updated:     2021-08-23
+#  Version:     0.5
+
+# File format sort of matches Python. '#' means comment line
+# Use * to keyflag location name.
+# Line after location has 'h' or 'c'
+# Next three lines are coefficients as float values.
+# Semicolon is stopper
+# *Location
+# h, C_1, C_2, C_3
+# C_1
+# C_2
+# C_3;
+# c
+# C_1
+# C_2
+# C_3;
+
+
+*SF
+h,1.234,3,5.27e-5;
+c,
+555,
+5.55,
+-5.55;
+
+*SJ #comment
+#h,12.3,4,53.2
+c,1.1,2,5;
